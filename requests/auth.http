@@ -1,0 +1,30 @@
+### Signup
+POST {{host}}/auth/signup
+Content-Type: application/json
+
+{
+  "username": "test",
+  "email": "test@example.com",
+  "password": "test"
+}
+
+### Login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+
+### Logout
+POST {{host}}/auth/logout
+Content-Type: application/json
+
+{}
+
+
+### User Info
+GET {{host}}/auth/login
+

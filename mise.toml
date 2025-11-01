@@ -1,0 +1,54 @@
+[tools]
+"pipx:awscli" = { version = "latest" }
+"cargo:sqlx-cli" = { version = "latest", default-features = false, features = "rustls,postgres" }
+
+[env]
+_.file = ".env"
+AWS_DEFAULT_REGION = 'garage'
+AWS_ENDPOINT_URL = 'http://localhost:3900'
+
+[tasks]
+
+[tasks.garage]
+run = "docker compose exec -it s3 /garage"
+alias = "g"
+
+[tasks.garage-setup]
+run = '''
+#!/usr/bin/env bash
+echo "Use the quick start guide"
+echo "https://garagehq.deuxfleurs.fr/documentation/quick-start/"
+exit 1
+set -euo pipefail
+
+function garage(){
+  mise run garage $@
+}
+NODE_ID=$(garage json-api GetClusterStatus | jq -r '.nodes[0].id')
+echo "Setting up node $NODE_ID"
+# Assign layout
+garage layout assign -z dc1 -c 1G $NODE_ID
+garage layout apply --version 1
+
+# Make bucket
+garage bucket create default
+BUCKET_ID=$(garage json-api ListBuckets  | jq -r '.[0].id')
+echo "Created bucket 'default' $BUCKET_ID"
+
+# Make key
+garage key create defaultkey
+ACCESS_KEY_ID=$(garage json-api ListKeys | jq -r '.[0].id')
+GetKeyInfo=$(jq -cnr --arg id "$ACCESS_KEY_ID" --arg showSecretKey "true" '$ARGS.named' )
+ACCESS_KEY_SECRET=$(garage json-api GetKeyInfo $GetKeyInfo)
+
+echo "Made access key $ACCESS_KEY"
+echo $ACCESS_KEY_SECRET > garage/.access_secret
+
+garage bucket allow \
+    --read \
+    --write \
+    --owner \
+    default \
+    --key defaultkey
+
+'''
