@@ -24,9 +24,6 @@ type Result<T, E = Box<dyn core::error::Error>> = std::result::Result<T, E>;
 async fn main() -> Result<()> {
     dotenvy::dotenv()?;
 
-    // panic!("{}", CONFIG.signup_token);
-    // panic!("{}", std::env::var("SIGNUP_TOKEN").unwrap());
-
     let fmt_layer = {
         let format = tracing_subscriber::fmt::format().with_source_location(false);
 
@@ -109,7 +106,7 @@ async fn main() -> Result<()> {
     let listener = tokio::net::TcpListener::bind(app_host).await?;
     info!(
         "Signup token is set to '{}'. Use it when trying to signup.",
-        CONFIG.signup_token
+        CONFIG.signup.token
     );
     info!("Starting on {app_host}");
     axum::serve(listener, router.into_make_service()).await?;

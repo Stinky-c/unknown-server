@@ -35,7 +35,11 @@ async fn post_signup(
     Json(signup): Json<dto::auth::UserSignupDto>,
 ) -> ResultJson<dto::auth::UserInfoDto> {
     // Signup token check
-    if (*CONFIG).signup_token != signup.token {
+    if (*CONFIG).signup.disable == true {
+        warn!("Signup is completely disabled");
+        return Err(StatusCode::IM_A_TEAPOT.into());
+    }
+    if (*CONFIG).signup.token != signup.token {
         return Err(StatusCode::UNAUTHORIZED.into());
     }
     // check if a user with similar creds exists
