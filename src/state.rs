@@ -1,6 +1,5 @@
-use fred::prelude::{Client, ClientLike, KeysInterface, Pool};
-use sqlx::pool::PoolConnection;
-use sqlx::{Error, PgPool, Postgres};
+use fred::prelude::{Client, Pool};
+use sqlx::PgPool;
 use std::sync::Arc;
 
 pub struct AppState {
@@ -17,6 +16,7 @@ impl AppState {
         &self.pg_pool
     }
 
+    #[allow(unused)]
     pub fn fred(&self) -> &Client {
         self.fred_pool.next()
     }
