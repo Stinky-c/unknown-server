@@ -35,13 +35,12 @@ async fn main() -> Result<()> {
         .with(fmt_layer)
         .with(filter_layer)
         .init();
-    // tracing_log::LogTracer::init()?;
 
     // Fred connection
     let fred_pool = {
         let s = tracing::info_span!("startup_fred");
         let _ = s.enter();
-        let connection = &(*CONFIG).redis.url;
+        let connection = &CONFIG.redis.url;
 
         info!("Connecting pool");
         let config = FredConfig::from_url(connection)?;
@@ -50,7 +49,7 @@ async fn main() -> Result<()> {
             None,
             None,
             None,
-            (*CONFIG).redis.max_connections as usize,
+            CONFIG.redis.max_connections as usize,
         )?;
 
         info!("Testing connection");
@@ -64,10 +63,10 @@ async fn main() -> Result<()> {
     let pg_pool = {
         let s = tracing::info_span!("startup_pg");
         let _ = s.enter();
-        let connection = &(*CONFIG).database.url;
+        let connection = &CONFIG.database.url;
         info!("Connecting pool");
         let pool = PgPoolOptions::new()
-            .max_connections((*CONFIG).database.max_connections)
+            .max_connections(CONFIG.database.max_connections)
             .connect(connection)
             .await?;
 
@@ -102,7 +101,7 @@ async fn main() -> Result<()> {
         .with_state(state)
         .layer(auth_layer);
 
-    let app_host = &(*CONFIG).app_host;
+    let app_host = &CONFIG.app_host;
     let listener = tokio::net::TcpListener::bind(app_host).await?;
     info!(
         "Signup token is set to '{}'. Use it when trying to signup.",

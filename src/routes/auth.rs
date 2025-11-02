@@ -35,11 +35,11 @@ async fn post_signup(
     Json(signup): Json<dto::auth::UserSignupDto>,
 ) -> ResultJson<dto::auth::UserInfoDto> {
     // Signup token check
-    if (*CONFIG).signup.disable == true {
+    if CONFIG.signup.disable {
         warn!("Signup is completely disabled");
         return Err(StatusCode::IM_A_TEAPOT.into());
     }
-    if (*CONFIG).signup.token != signup.token {
+    if CONFIG.signup.token != signup.token {
         return Err(StatusCode::UNAUTHORIZED.into());
     }
     // check if a user with similar creds exists
@@ -91,10 +91,9 @@ async fn get_info(auth_session: AuthSession) -> ResultJson<dto::auth::UserInfoDt
 }
 
 async fn post_logout(mut auth_session: AuthSession) -> ResultJson<dto::shared::SuccessResponse> {
-    let user = match auth_session.logout().await {
-        Ok(u) => u,
-        Err(_) => return Err(StatusCode::UNAUTHORIZED.into()),
-    };
+    if auth_session.logout().await.is_err() {
+        return Err(StatusCode::UNAUTHORIZED.into());
+    }
 
     Ok(Json(dto::shared::SuccessResponse {
         message: "Success".to_string(),

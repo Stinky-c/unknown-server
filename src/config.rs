@@ -54,7 +54,7 @@ impl SignupConfig {
         let mut token = [0; 32];
         let mut rng = rand::prelude::StdRng::from_os_rng();
         rng.fill_bytes(&mut token);
-        BASE64_STANDARD_NO_PAD.encode(&token)
+        BASE64_STANDARD_NO_PAD.encode(token)
     }
 }
 
@@ -79,24 +79,10 @@ impl AppConfig {
 }
 
 pub const CONFIG: LazyCell<AppConfig> = LazyCell::new(|| {
-    let config: AppConfig = Figment::new()
-        .merge(Toml::file("config.toml"))
-        .merge(Yaml::file("config.yaml"))
+    Figment::new()
+        .merge(Toml::file(Env::var_or("CONFIG_TOML_FILE", "config.toml")))
+        .merge(Yaml::file(Env::var_or("CONFIG_YAML_FILE", "config.yaml")))
         .join(FileAdapter::wrap(Env::raw().split("_")))
         .extract()
-        .expect("Failed top parse config");
-
-    config
-    /*
-
-    let config = config::Config::builder()
-        .add_source(config::File::with_name("config").required(false))
-        .add_source(config::Environment::default().separator("_"))
-        .build()
-        .expect("Failed to build config");
-
-    config
-        .try_deserialize::<AppConfig>()
-        .expect("Failed to deserialize config")
-     */
+        .expect("Failed top parse config")
 });
