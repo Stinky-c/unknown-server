@@ -1,3 +1,4 @@
+use axum::debug_handler;
 use crate::prelude::*;
 use axum::http::StatusCode;
 
@@ -19,8 +20,8 @@ async fn post_login(
         Err(err) => return Err(AppError::AxumLogin(err)),
     };
 
-    if auth_session.login(&user).await.is_err() {
-        return Err(StatusCode::INTERNAL_SERVER_ERROR.into());
+    if let Err(err) = auth_session.login(&user).await {
+        return Err(AppError::AxumLogin(err));
     }
 
     Ok(Json(dto::auth::UserInfoDto {
@@ -37,8 +38,9 @@ async fn post_signup(
     // Signup token check
     if CONFIG.signup.disable {
         warn!("Signup is completely disabled");
-        return Err(StatusCode::IM_A_TEAPOT.into());
+        return Err(StatusCode::FORBIDDEN.into());
     }
+
     if CONFIG.signup.token != signup.token {
         return Err(StatusCode::UNAUTHORIZED.into());
     }
@@ -52,9 +54,9 @@ async fn post_signup(
 
     if user_exists.exists() {
         // User exists. return early
+        warn!("Account already exists");
         return Err(StatusCode::UNAUTHORIZED.into());
     }
-    info!("User does not exists");
 
     let user: models::user::UserInsert = signup.into();
 
@@ -68,8 +70,8 @@ async fn post_signup(
     .fetch_one(state.db())
     .await?;
 
-    if auth_session.login(&insert).await.is_err() {
-        return Err(StatusCode::UNAUTHORIZED.into());
+    if let Err(err) = auth_session.login(&insert).await {
+        return Err(AppError::AxumLogin(err));
     };
 
     Ok(Json(dto::auth::UserInfoDto {
@@ -91,8 +93,8 @@ async fn get_info(auth_session: AuthSession) -> ResultJson<dto::auth::UserInfoDt
 }
 
 async fn post_logout(mut auth_session: AuthSession) -> ResultJson<dto::shared::SuccessResponse> {
-    if auth_session.logout().await.is_err() {
-        return Err(StatusCode::UNAUTHORIZED.into());
+    if let Err(err) = auth_session.logout().await {
+        return Err(AppError::AxumLogin(err));
     }
 
     Ok(Json(dto::shared::SuccessResponse {

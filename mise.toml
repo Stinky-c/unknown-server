@@ -38,8 +38,8 @@ echo "Created bucket 'default' $BUCKET_ID"
 # Make key
 garage key create defaultkey
 ACCESS_KEY_ID=$(garage json-api ListKeys | jq -r '.[0].id')
-GetKeyInfo=$(jq -cnr --arg id "$ACCESS_KEY_ID" --arg showSecretKey "true" '$ARGS.named' )
-ACCESS_KEY_SECRET=$(garage json-api GetKeyInfo $GetKeyInfo)
+GETKEYINFO=$(jq -cnr --arg id "$ACCESS_KEY_ID" --arg showSecretKey "true" '$ARGS.named' )
+ACCESS_KEY_SECRET=$(garage json-api GetKeyInfo $GETKEYINFO)
 
 echo "Made access key $ACCESS_KEY"
 echo $ACCESS_KEY_SECRET > garage/.access_secret

@@ -9,7 +9,7 @@ axum = { version = "0.8", features = ["json", "http2", "macros", "tokio"] }
 serde = "1"
 fred = "10.1"
 axum-login = "0.18"
-tower-sessions = "0.14"
+tower-sessions = { version = "0.14", features = [] }
 tower-sessions-redis-store = "0.16"
 tokio = { version = "1.48", features = ["macros", "rt-multi-thread", "rt", "full"] }
 time = { version = "0.3", features = ["serde", "local-offset"] }
