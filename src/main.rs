@@ -14,6 +14,7 @@ use fred::prelude::{ClientLike, Config as FredConfig, Pool as FredPool};
 use sqlx::postgres::PgPoolOptions;
 use std::sync::Arc;
 use time::Duration;
+use tokio::signal;
 use tower_sessions::{Expiry, SessionManagerLayer};
 use tower_sessions_redis_store::RedisStore;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
@@ -86,12 +87,15 @@ async fn main() -> Result<()> {
         let s = tracing::info_span!("auth");
         let _ = s.enter();
         let session_store = RedisStore::new(fred_pool.clone());
+
         let session_layer = SessionManagerLayer::new(session_store)
-            .with_secure(false)
-            .with_expiry(Expiry::OnInactivity(Duration::hours(1)));
+            .with_expiry(Expiry::OnInactivity(Duration::hours(1)))
+            .with_secure(false);
 
         let backend = Backend::new(pg_pool.clone());
-        AuthManagerLayerBuilder::new(backend, session_layer).build()
+        let layer = AuthManagerLayerBuilder::new(backend, session_layer).build();
+
+        layer
     };
 
     let state = Arc::new(AppState::new(pg_pool, fred_pool));
@@ -108,7 +112,34 @@ async fn main() -> Result<()> {
         CONFIG.signup.token
     );
     info!("Starting on {app_host}");
-    axum::serve(listener, router.into_make_service()).await?;
+    axum::serve(listener, router)
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
 
+    info!("Done! Exiting...");
     Ok(())
+}
+
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => {info!("shutdown signal received")},
+        _ = terminate => {info!("shutdown signal received")},
+    }
 }
