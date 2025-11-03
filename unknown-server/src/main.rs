@@ -15,6 +15,7 @@ use sqlx::postgres::PgPoolOptions;
 use std::sync::Arc;
 use time::Duration;
 use tokio::signal;
+use tower_http::trace::TraceLayer;
 use tower_sessions::{Expiry, SessionManagerLayer};
 use tower_sessions_redis_store::RedisStore;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
@@ -103,7 +104,8 @@ async fn main() -> Result<()> {
         .route("/", get(|| async { "Hello, World!" }))
         .nest("/auth", routes::auth::router())
         .with_state(state)
-        .layer(auth_layer);
+        .layer(auth_layer)
+        .layer(TraceLayer::new_for_http());
 
     let app_host = &CONFIG.app_host;
     let listener = tokio::net::TcpListener::bind(app_host).await?;

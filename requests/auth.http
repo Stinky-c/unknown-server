@@ -26,3 +26,5 @@ GET {{host}}/auth/login
 POST {{host}}/auth/logout
 Content-Type: application/json
 
+### Root
+GET {{host}}/

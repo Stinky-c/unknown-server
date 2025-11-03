@@ -1,0 +1,27 @@
+[package]
+name = "unknown-server-web"
+version = "0.1.0"
+edition = "2024"
+
+
+[dependencies]
+dotenvy = "0.15"
+axum = { version = "0.8", features = ["json", "http2", "macros", "tokio"] }
+serde = "1"
+fred = "10.1"
+axum-login = "0.18"
+tower-sessions = { version = "0.14", features = [] }
+tower-sessions-redis-store = "0.16"
+tokio = { version = "1.48", features = ["macros", "rt-multi-thread", "rt", "full"] }
+time = { version = "0.3", features = ["serde", "local-offset"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "time", "local-time", "registry"] }
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "migrate", "uuid", "time"] }
+figment = { version = "0.10", features = ["toml", "yaml", "env"] }
+figment_file_provider_adapter = "0.1"
+thiserror = "2"
+uuid = { version = "1.18", features = ["serde", "v4", "v7"] }
+password-auth = { version = "1.0", features = ["argon2"] }
+rand = { version = "0.9", features = ["std_rng"] }
+base64 = "0.22"
+tower-http = { version = "0.6.6", features = ["trace"] }
