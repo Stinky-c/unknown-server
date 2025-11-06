@@ -1,10 +1,31 @@
 [package]
-name = "unknown-actor"
+name = "unknown-server-actor"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "unknown_actor_lib"
+path = "src/lib.rs"
+
 [[bin]]
 name = "unknown-server-actor"
-path = "src/server.rs"
+path = "src/main.rs"
+required-features = ["server"]
 
 [dependencies]
+kameo = { version = "0.18", features = ["tracing", "macros"] }
+kameo_actors = { version = "0.3" }
+tokio = { version = "1", features = ["rt", "rt-multi-thread"] }
+thiserror = "2"
+futures = "0.3.31"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "time", "local-time", "registry"], optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+
+
+libp2p = { version = "0.56", optional = true, features = ["full"] }
+
+
+[features]
+server = ["tokio/signal", "libp2p", "tracing-subscriber", "kameo/remote", "serde"]
+pool = []

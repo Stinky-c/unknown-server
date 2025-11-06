@@ -1,16 +1,22 @@
-mod server;
+pub mod actor;
+pub mod error;
+pub mod message;
+#[cfg(feature = "pool")]
+pub mod pool;
 
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub static NAME: &str = "unknown-actor";
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[allow(unused_imports)]
+pub mod prelude {
+    pub use super::NAME;
+    pub use crate::actor::ServerActor;
+    pub use crate::message::{Add, Greet};
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+    // Server only
+    #[cfg(feature = "server")]
+    pub use crate::message::Shutdown;
+
+    // Pool only
+    #[cfg(feature = "pool")]
+    pub use crate::pool::{ActorPoolRef, Broadcast, Dispatch, pool};
 }

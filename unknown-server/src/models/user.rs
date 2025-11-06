@@ -75,8 +75,7 @@ impl Debug for UserInsert {
     }
 }
 impl UserInsert {
-    pub fn new(username: String, email: String, password: String) -> Self {
-        let pw_hash = password_auth::generate_hash(password); //TODO: io blocking. move to thread spawn
+    pub fn new(username: String, email: String, pw_hash: String) -> Self {
         let id = Uuid::now_v7();
         Self {
             id,

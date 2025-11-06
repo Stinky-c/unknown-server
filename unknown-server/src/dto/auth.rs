@@ -45,10 +45,3 @@ impl Debug for UserSignupDto {
 }
 
 crate::make_mod!(prelude UserInfoDto, CredentialsDto, UserSignupDto);
-
-// Convert UserSignup into a UserInsert object
-impl From<UserSignupDto> for crate::models::user::UserInsert {
-    fn from(value: UserSignupDto) -> Self {
-        Self::new(value.username, value.email, value.password)
-    }
-}

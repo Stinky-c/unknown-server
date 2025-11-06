@@ -1,6 +1,6 @@
 use crate::{dto, models};
 use axum_login::{AuthnBackend, UserId};
-use password_auth::verify_password;
+use password_auth::{generate_hash, verify_password};
 use sqlx::PgPool;
 use tokio::task;
 
@@ -11,6 +11,9 @@ pub enum BackendError {
 
     #[error(transparent)]
     TaskJoin(#[from] task::JoinError),
+
+    #[error(transparent)]
+    PasswordAuth(#[from] password_auth::VerifyError),
 }
 
 #[derive(Debug, Clone)]
@@ -54,4 +57,10 @@ impl AuthnBackend for Backend {
 
         Ok(user)
     }
+}
+
+pub(crate) async fn hash_password(password: String) -> Result<String, BackendError> {
+    task::spawn_blocking(move || generate_hash(password))
+        .await
+        .map_err(|err| BackendError::TaskJoin(err))
 }

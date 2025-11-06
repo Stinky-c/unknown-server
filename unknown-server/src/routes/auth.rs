@@ -1,13 +1,23 @@
-use axum::debug_handler;
 use crate::prelude::*;
-use axum::http::StatusCode;
+use crate::user;
+use axum::Extension;
+use axum::response::Html;
+use minijinja::context;
 
 pub(crate) fn router() -> Router<AppStateRef> {
     Router::new()
+        .route("/", get(get_root))
         .route("/login", get(get_info))
         .route("/login", post(post_login))
         .route("/signup", post(post_signup))
         .route("/logout", post(post_logout))
+}
+
+async fn get_root(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
+    let template = env.get_template("auth/index.j2.html")?;
+    let ctx = context! {};
+    let render = template.render(ctx)?;
+    Ok(Html(render))
 }
 
 async fn post_login(
@@ -58,7 +68,10 @@ async fn post_signup(
         return Err(StatusCode::UNAUTHORIZED.into());
     }
 
-    let user: models::user::UserInsert = signup.into();
+    let pw_hash = user::hash_password(signup.password)
+        .await
+        .map_err(|_| AppError::Code(StatusCode::INTERNAL_SERVER_ERROR))?; //TODO: map to a better error
+    let user = models::user::UserInsert::new(signup.username, signup.email, pw_hash);
 
     let insert: models::user::User = sqlx::query_as(
         "INSERT INTO users (id, username, email, pw_hash) values ( $1, $2, $3, $4) returning *",

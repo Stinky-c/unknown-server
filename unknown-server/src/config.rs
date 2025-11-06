@@ -1,3 +1,4 @@
+use axum_client_ip::ClientIpSource;
 use base64::Engine;
 use base64::prelude::BASE64_STANDARD_NO_PAD;
 use figment::{
@@ -70,11 +71,19 @@ pub(crate) struct AppConfig {
     /// Host and port to listen on. Defaults to `0.0.0.0:3000`
     #[serde(default = "AppConfig::default_app_host")]
     pub(crate) app_host: String,
+
+    /// Axum Ip Source.
+    /// See [`ClientIpSource`] for available values.
+    #[serde(default = "AppConfig::default_ip_source")]
+    pub(crate) ip_source: ClientIpSource,
 }
 
 impl AppConfig {
     fn default_app_host() -> String {
         "0.0.0.0:3000".to_string()
+    }
+    fn default_ip_source() -> ClientIpSource {
+        ClientIpSource::ConnectInfo
     }
 }
 
@@ -82,7 +91,7 @@ pub const CONFIG: LazyCell<AppConfig> = LazyCell::new(|| {
     Figment::new()
         .merge(Toml::file(Env::var_or("CONFIG_TOML_FILE", "config.toml")))
         .merge(Yaml::file(Env::var_or("CONFIG_YAML_FILE", "config.yaml")))
-        .join(FileAdapter::wrap(Env::raw().split("_")))
+        .join(FileAdapter::wrap(Env::raw().split("__")))
         .extract()
         .expect("Failed top parse config")
 });
