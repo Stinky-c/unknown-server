@@ -8,12 +8,15 @@ pub struct UserInfoDto {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct CredentialsDto {
+pub struct UserLoginDto {
     pub username: String,
     pub password: String,
+
+    #[serde(default)] // Default for bool is false.
+    pub remember: bool,
 }
 
-impl Debug for CredentialsDto {
+impl Debug for UserLoginDto {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("CredentialsDto")
             .field("username", &self.username)
@@ -30,18 +33,17 @@ pub struct UserSignupDto {
     pub email: String,
     /// Unhashed password
     pub password: String,
-    /// Signup token
-    pub token: String,
+    /// unhashed confirm password
+    pub confirm_password: String,
 }
 impl Debug for UserSignupDto {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("UserSignupDto")
             .field("username", &self.username)
             .field("email", &self.email)
-            .field("token", &"[protected]")
             .field("password", &"[protected]")
             .finish()
     }
 }
 
-crate::make_mod!(prelude UserInfoDto, CredentialsDto, UserSignupDto);
+crate::make_mod!(prelude UserInfoDto, UserLoginDto, UserSignupDto);

@@ -30,7 +30,6 @@ axum-client-ip = "1.1"
 unknown-server-actor = { path = "../unknown-actor", features = ["pool"] }
 minijinja-embed = "2.12.0"
 minijinja = "2.12.0"
-rust-embed = "8.9"
 memory-serve = "1.2.2"
 
 

@@ -1,29 +1,45 @@
 use crate::prelude::*;
 use crate::user;
 use axum::Extension;
-use axum::response::Html;
+use axum::response::{Html, Redirect};
 use minijinja::context;
 
 pub(crate) fn router() -> Router<AppStateRef> {
     Router::new()
         .route("/", get(get_root))
-        .route("/login", get(get_info))
-        .route("/login", post(post_login))
-        .route("/signup", post(post_signup))
-        .route("/logout", post(post_logout))
+        .route("/login", get(get_login).post(post_login))
+        .route("/signup", get(get_signup).post(post_signup))
+
+    // .route("/login", get(get_info))
+    // .route("/login", post(post_login))
+    // .route("/signup", post(post_signup))
+    // .route("/logout", post(post_logout))
 }
 
-async fn get_root(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
-    let template = env.get_template("auth/index.j2.html")?;
-    let ctx = context! {};
+async fn get_root() -> Redirect {
+    Redirect::to("/auth/signin")
+}
+
+async fn get_login(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
+    let template = env.get_template("auth/login.j2.html")?;
+    let ctx = context! { page_title => "Sign in"};
+    let render = template.render(ctx)?;
+    Ok(Html(render))
+}
+
+async fn get_signup(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
+    let template = env.get_template("auth/signup.j2.html")?;
+    let ctx = context! { page_title => "Sign up"};
     let render = template.render(ctx)?;
     Ok(Html(render))
 }
 
 async fn post_login(
     mut auth_session: AuthSession,
-    Json(credentials): Json<dto::auth::CredentialsDto>,
+    Form(credentials): Form<dto::auth::UserLoginDto>,
 ) -> ResultJson<dto::auth::UserInfoDto> {
+    info!("{:?}", credentials);
+
     let user = match auth_session.authenticate(credentials.clone()).await {
         Ok(Some(user)) => user,
         Ok(None) => return Err(StatusCode::UNAUTHORIZED.into()),
@@ -43,7 +59,7 @@ async fn post_login(
 async fn post_signup(
     State(state): State<AppStateRef>,
     mut auth_session: AuthSession,
-    Json(signup): Json<dto::auth::UserSignupDto>,
+    Form(signup): Form<dto::auth::UserSignupDto>,
 ) -> ResultJson<dto::auth::UserInfoDto> {
     // Signup token check
     if CONFIG.signup.disable {
@@ -51,9 +67,10 @@ async fn post_signup(
         return Err(StatusCode::FORBIDDEN.into());
     }
 
-    if CONFIG.signup.token != signup.token {
-        return Err(StatusCode::UNAUTHORIZED.into());
+    if (signup.password != signup.confirm_password) {
+        return Err(StatusCode::UNAUTHORIZED.into())
     }
+
     // check if a user with similar creds exists
     let user_exists: DBExists =
         sqlx::query_as("SELECT EXISTS (SELECT 1 FROM users WHERE email = $1 OR username = $2);")

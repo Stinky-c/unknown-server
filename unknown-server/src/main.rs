@@ -18,7 +18,7 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 use time::Duration;
 use tokio::signal;
-use tower_http::trace::TraceLayer;
+use tower_http::trace::{OnFailure, TraceLayer};
 use tower_sessions::{Expiry, SessionManagerLayer};
 use tower_sessions_redis_store::RedisStore;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};

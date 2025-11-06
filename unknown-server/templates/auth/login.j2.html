@@ -1,0 +1,72 @@
+{% extends "base.j2.html" %}
+{% block inner_html %}
+<main class="card" role="main">
+  <!-- auth-area is the element we hx-swap on submit -->
+  <div id="auth-area">
+    <h1>Sign in</h1>
+    <p class="lead">Welcome back — enter your details to continue.</p>
+
+    <!--
+      Form behavior:
+      - hx-post sends form via AJAX to /login
+      - hx-swap="outerHTML" replaces #auth-area entirely with server response fragment
+      - hx-headers picks up a CSRF token meta tag (replace on server-render)
+      - hx-indicator shows a small loading indicator while request is in-flight
+    -->
+    <form id="login-form"
+          hx-post="/auth/login"
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRF-Token":"REPLACE_WITH_TOKEN"}'
+          hx-indicator="#auth-indicator"
+          method="post"
+          autocomplete="on">
+      <div id="form-errors" aria-live="polite"></div>
+
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="john.doe" required/>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required
+               minlength="6"/>
+      </div>
+
+      <div class="row controls" style="margin-top:0.25rem;">
+        <label class="remember">
+          <input id="remember" type="checkbox" name="remember" value="1"/>
+          Remember me
+        </label>
+
+        <div style="display:flex; align-items:center;">
+          <div id="auth-indicator">Processing…</div>
+          <button type="submit" class="btn">Sign in</button>
+        </div>
+      </div>
+
+      <div style="margin-top:0.75rem; text-align:center;">
+        <a class="muted-link" href="/auth/forgot">Forgot password?</a>
+      </div>
+    </form>
+    <hr style="margin:1rem 0; border:none; border-top:1px solid #f0f2f4"/>
+    <p style="text-align:center; font-size:0.9rem; color:var(--muted); margin:0;">Or <a
+        href="/auth/signup" class="muted-link">create an account</a></p>
+  </div>
+</main>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  // Example: client-side enhancement to inspect htmx responses (optional)
+  document.body.addEventListener('htmx:afterRequest', function (evt) {
+    // focus first invalid input if server marks one with .invalid
+    var container = evt.detail.target;
+    var invalid = container && container.querySelector('.invalid');
+    if (invalid) {
+      invalid.focus();
+    }
+  });
+</script>
+{% endblock %}

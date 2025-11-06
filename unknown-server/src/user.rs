@@ -29,7 +29,7 @@ pub type AuthSession = axum_login::AuthSession<Backend>;
 
 impl AuthnBackend for Backend {
     type User = models::user::User;
-    type Credentials = dto::auth::CredentialsDto;
+    type Credentials = dto::auth::UserLoginDto;
     type Error = BackendError;
 
     async fn authenticate(
