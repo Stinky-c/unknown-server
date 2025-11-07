@@ -6,9 +6,11 @@ pub use crate::user::{AuthSession, Backend};
 use axum::Extension;
 pub use axum::extract::State;
 pub use axum::http::StatusCode;
+pub use axum::response::{Html, Redirect};
 pub use axum::routing::{delete, get, patch, post, put};
 pub use axum::{Form, Json, Router};
-use axum_login::login_required;
+pub use axum_login::login_required;
+pub use minijinja::context;
 
 pub(crate) use tracing::{debug, error, info, trace, warn};
 
@@ -18,8 +20,7 @@ pub(crate) use crate::models;
 pub type Result<T, E = AppError> = axum::response::Result<T, E>;
 pub type ResultJson<T, E = AppError> = Result<Json<T>, E>;
 pub type ResultForm<T, E = AppError> = Result<Form<T>, E>;
-
-pub type JinjaExtension<'a> = Extension<minijinja::Environment<'a>>;
+pub type ResultHtml<E = AppError> = Result<Html<String>, E>;
 
 /// A simple macro used to make a crate visible module and export names from `super`.
 /// ```

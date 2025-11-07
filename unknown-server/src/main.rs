@@ -1,3 +1,5 @@
+#![allow(clippy::borrow_interior_mutable_const)]
+#![allow(clippy::explicit_auto_deref)]
 mod config;
 mod dto;
 mod error;
@@ -18,11 +20,10 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 use time::Duration;
 use tokio::signal;
-use tower_http::trace::{OnFailure, TraceLayer};
+use tower_http::trace::TraceLayer;
 use tower_sessions::{Expiry, SessionManagerLayer};
 use tower_sessions_redis_store::RedisStore;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
-use unknown_actor_lib::pool::pool;
 
 type Result<T, E = Box<dyn core::error::Error>> = std::result::Result<T, E>;
 
@@ -106,16 +107,7 @@ async fn main() -> Result<()> {
             .with_secure(false);
 
         let backend = Backend::new(pg_pool.clone());
-        let layer = AuthManagerLayerBuilder::new(backend, session_layer).build();
-
-        layer
-    };
-
-    let jinja_env = {
-        let mut env = minijinja::Environment::new();
-        minijinja_embed::load_templates!(&mut env);
-
-        env
+        AuthManagerLayerBuilder::new(backend, session_layer).build()
     };
 
     let assets_router = {
@@ -126,11 +118,7 @@ async fn main() -> Result<()> {
     };
 
     // Actor pool
-    let actor_pool = {
-        let pool = pool(None, None).await?;
-
-        pool
-    };
+    let actor_pool = unknown_actor_lib::pool::pool(None, None).await?;
 
     let state = Arc::new(AppState::new(pg_pool, fred_pool, actor_pool));
     let router = Router::new()
@@ -142,7 +130,6 @@ async fn main() -> Result<()> {
         .with_state(state)
         .layer(auth_layer)
         .layer(prometheus_layer)
-        .layer(Extension(jinja_env))
         .layer((*CONFIG).ip_source.clone().into_extension())
         .layer(TraceLayer::new_for_http());
 

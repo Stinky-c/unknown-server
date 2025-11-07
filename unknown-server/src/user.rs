@@ -62,5 +62,5 @@ impl AuthnBackend for Backend {
 pub(crate) async fn hash_password(password: String) -> Result<String, BackendError> {
     task::spawn_blocking(move || generate_hash(password))
         .await
-        .map_err(|err| BackendError::TaskJoin(err))
+        .map_err(BackendError::TaskJoin)
 }

@@ -1,8 +1,5 @@
 use crate::prelude::*;
 use crate::user;
-use axum::Extension;
-use axum::response::{Html, Redirect};
-use minijinja::context;
 
 pub(crate) fn router() -> Router<AppStateRef> {
     Router::new()
@@ -20,18 +17,14 @@ async fn get_root() -> Redirect {
     Redirect::to("/auth/signin")
 }
 
-async fn get_login(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
-    let template = env.get_template("auth/login.j2.html")?;
-    let ctx = context! { page_title => "Sign in"};
-    let render = template.render(ctx)?;
-    Ok(Html(render))
+async fn get_login(State(state): State<AppStateRef>) -> ResultHtml {
+    let template = state.render_template("auth/login.j2.html", None)?;
+    Ok(Html(template))
 }
 
-async fn get_signup(Extension(env): JinjaExtension<'_>) -> Result<Html<String>> {
-    let template = env.get_template("auth/signup.j2.html")?;
-    let ctx = context! { page_title => "Sign up"};
-    let render = template.render(ctx)?;
-    Ok(Html(render))
+async fn get_signup(State(state): State<AppStateRef>) -> ResultHtml {
+    let template = state.render_template("auth/signup.j2.html", None)?;
+    Ok(Html(template))
 }
 
 async fn post_login(
@@ -67,8 +60,8 @@ async fn post_signup(
         return Err(StatusCode::FORBIDDEN.into());
     }
 
-    if (signup.password != signup.confirm_password) {
-        return Err(StatusCode::UNAUTHORIZED.into())
+    if signup.password != signup.confirm_password {
+        return Err(StatusCode::UNAUTHORIZED.into());
     }
 
     // check if a user with similar creds exists

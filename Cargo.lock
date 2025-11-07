@@ -5168,7 +5168,6 @@ dependencies = [
 name = "unknown-server-actor"
 version = "0.1.0"
 dependencies = [
- "futures",
  "kameo",
  "kameo_actors",
  "libp2p",

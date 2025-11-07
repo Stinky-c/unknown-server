@@ -17,7 +17,6 @@ kameo = { version = "0.18", features = ["tracing", "macros"] }
 kameo_actors = { version = "0.3" }
 tokio = { version = "1", features = ["rt", "rt-multi-thread"] }
 thiserror = "2"
-futures = "0.3.31"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time", "local-time", "registry"], optional = true }
 serde = { version = "1", features = ["derive"], optional = true }
