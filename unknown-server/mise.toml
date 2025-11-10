@@ -1,0 +1,7 @@
+[tasks.dev]
+description = "Run the backend in debug mode"
+run = "cargo run"
+
+[tasks.build]
+description = "Build the release backend binary"
+run = "cargo build --release"

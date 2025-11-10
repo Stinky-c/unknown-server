@@ -1,3 +1,4 @@
+experimental_monorepo_root = true
 [tools]
 "pipx:awscli" = { version = "latest" }
 "cargo:sqlx-cli" = { version = "latest", default-features = false, features = "rustls,postgres" }
@@ -12,10 +13,12 @@ AWS_ENDPOINT_URL = 'http://localhost:3900'
 [tasks]
 
 [tasks.garage]
+description = "Use to interact with garagehq. Uses the garage cli syntax."
 run = "docker compose exec -it s3 /garage"
 alias = "g"
 
 [tasks.garage-setup]
+description = "DO NOT USE"
 run = '''
 #!/usr/bin/env bash
 echo "Use the quick start guide"

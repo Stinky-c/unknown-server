@@ -23,8 +23,3 @@ serde = { version = "1", features = ["derive"], optional = true }
 
 
 libp2p = { version = "0.56", optional = true, features = ["full"] }
-
-
-[features]
-server = ["tokio/signal", "libp2p", "tracing-subscriber", "kameo/remote", "serde"]
-pool = []

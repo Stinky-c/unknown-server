@@ -1,0 +1,11 @@
+[tasks.dev]
+description = "Run the frontend in dev mode"
+run = "pnpm run dev"
+
+[tasks.build]
+description = "Build the release frontend dist"
+run = "pnpm run build"
+
+[tasks.clean]
+description = "Clean old dist"
+run = "rm -r .parcel-cache/ dist/"

@@ -1,11 +1,8 @@
 use crate::message::*;
 use kameo::Actor;
 use kameo::message::{Context, Message};
-#[cfg(feature = "server")]
-use kameo::{RemoteActor, remote_message};
 use tracing::info;
 
-#[cfg_attr(feature = "server", derive(RemoteActor))]
 #[derive(Actor)]
 #[actor(name = "UnknownActor")]
 pub struct ServerActor;
@@ -16,7 +13,6 @@ impl ServerActor {
     }
 }
 
-#[cfg_attr(feature = "server", remote_message)]
 impl Message<Greet> for ServerActor {
     type Reply = ();
 
@@ -25,7 +21,6 @@ impl Message<Greet> for ServerActor {
     }
 }
 
-#[cfg_attr(feature = "server", remote_message)]
 impl Message<Add> for ServerActor {
     type Reply = u32;
 
