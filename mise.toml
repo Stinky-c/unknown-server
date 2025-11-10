@@ -1,6 +1,8 @@
 [tools]
 "pipx:awscli" = { version = "latest" }
 "cargo:sqlx-cli" = { version = "latest", default-features = false, features = "rustls,postgres" }
+node = "latest"
+pnpm = "latest"
 
 [env]
 _.file = ".env"

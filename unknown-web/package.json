@@ -1,0 +1,33 @@
+{
+  "name": "unknown-web",
+  "private": true,
+  "version": "0.0.0",
+  "source": "src/**/*.html",
+  "scripts": {
+    "dev": "parcel src/**/*.html",
+    "build": "parcel build src/**/*.html --public-url ./"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "daisyui": "^5.4.7",
+    "parcel": "^2.14.0",
+    "postcss": "^8.5.6",
+    "posthtml": "^0.16.7",
+    "posthtml-doctype": "^1.1.1",
+    "posthtml-include": "^2.0.1",
+    "tailwindcss": "^4.1.17"
+  },
+  "dependencies": {
+    "htmx.org": "^2.0.8",
+    "zxcvbn": "^4.4.2"
+  },
+  "targets": {
+    "default": {
+      "context": "browser",
+      "includeNodeModules": [
+        "htmx.org",
+        "zxcvbn"
+      ]
+    }
+  }
+}

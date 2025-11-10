@@ -10,7 +10,7 @@ mod state;
 mod user;
 
 use crate::prelude::*;
-use axum::{Extension, Router, routing::get};
+use axum::{Router, routing::get};
 use axum_login::AuthManagerLayerBuilder;
 use axum_prometheus::PrometheusMetricLayer;
 use fred::prelude::{ClientLike, Config as FredConfig, Pool as FredPool};
@@ -124,7 +124,7 @@ async fn main() -> Result<()> {
     let router = Router::new()
         .route("/", get(|| async { "Hello, World!" }))
         .route("/metrics", get(|| async move { metric_handle.render() }))
-        .nest("/auth", routes::auth::router())
+        .nest("/api/auth", routes::auth::router())
         .nest("/upload", routes::upload::router())
         .merge(assets_router)
         .with_state(state)
