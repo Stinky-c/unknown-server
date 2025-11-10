@@ -18,9 +18,6 @@ pub enum AppError {
 
     #[error(transparent)]
     AxumLogin(#[from] axum_login::Error<Backend>),
-
-    #[error(transparent)]
-    JinjaError(#[from] minijinja::Error),
 }
 
 #[derive(Serialize)]
@@ -67,14 +64,6 @@ impl IntoResponse for AppError {
                         )
                     }
                 }
-            }
-            AppError::JinjaError(err) => {
-                error!(%err);
-
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "Something went wrong".to_string(),
-                )
             }
         };
 

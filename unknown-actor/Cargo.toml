@@ -7,11 +7,6 @@ edition = "2024"
 name = "unknown_actor_lib"
 path = "src/lib.rs"
 
-[[bin]]
-name = "unknown-server-actor"
-path = "src/main.rs"
-required-features = ["server"]
-
 [dependencies]
 kameo = { version = "0.18", features = ["tracing", "macros"] }
 kameo_actors = { version = "0.3" }

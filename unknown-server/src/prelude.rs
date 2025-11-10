@@ -10,7 +10,6 @@ pub use axum::response::{Html, Redirect};
 pub use axum::routing::{delete, get, patch, post, put};
 pub use axum::{Form, Json, Router};
 pub use axum_login::login_required;
-pub use minijinja::context;
 
 pub(crate) use tracing::{debug, error, info, trace, warn};
 

@@ -4,8 +4,8 @@ use crate::user;
 pub(crate) fn router() -> Router<AppStateRef> {
     Router::new()
         .route("/", get(get_root))
-        .route("/login", get(get_login).post(post_login))
-        .route("/signup", get(get_signup).post(post_signup))
+        .route("/login", post(post_login))
+        .route("/signup", post(post_signup))
 
     // .route("/login", get(get_info))
     // .route("/login", post(post_login))
@@ -15,16 +15,6 @@ pub(crate) fn router() -> Router<AppStateRef> {
 
 async fn get_root() -> Redirect {
     Redirect::to("/auth/signin")
-}
-
-async fn get_login(State(state): State<AppStateRef>) -> ResultHtml {
-    let template = state.render_template("auth/login.j2.html", None)?;
-    Ok(Html(template))
-}
-
-async fn get_signup(State(state): State<AppStateRef>) -> ResultHtml {
-    let template = state.render_template("auth/signup.j2.html", None)?;
-    Ok(Html(template))
 }
 
 async fn post_login(

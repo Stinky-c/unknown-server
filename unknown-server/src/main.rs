@@ -110,13 +110,6 @@ async fn main() -> Result<()> {
         AuthManagerLayerBuilder::new(backend, session_layer).build()
     };
 
-    let assets_router = {
-        MemoryServe::new(load_assets!("assets/"))
-            .index_file(None)
-            .cache_control(CacheControl::NoCache)
-            .into_router()
-    };
-
     // Actor pool
     let actor_pool = unknown_actor_lib::pool::pool(None, None).await?;
 
@@ -126,12 +119,22 @@ async fn main() -> Result<()> {
         .route("/metrics", get(|| async move { metric_handle.render() }))
         .nest("/api/auth", routes::auth::router())
         .nest("/upload", routes::upload::router())
-        .merge(assets_router)
         .with_state(state)
         .layer(auth_layer)
         .layer(prometheus_layer)
         .layer((*CONFIG).ip_source.clone().into_extension())
         .layer(TraceLayer::new_for_http());
+
+    #[cfg(not(debug_assertions))]
+    {
+        let assets_router = {
+            MemoryServe::new(load_assets!("dist/"))
+                .index_file(None)
+                .cache_control(CacheControl::Medium)
+                .into_router()
+        };
+        router.merge(assets_router)
+    }
 
     let app_host = &CONFIG.app_host;
     let listener = tokio::net::TcpListener::bind(app_host).await?;

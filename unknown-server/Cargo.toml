@@ -28,8 +28,6 @@ tower-http = { version = "0.6.6", features = ["trace"] }
 axum-prometheus = "0.9.0"
 axum-client-ip = "1.1"
 unknown-server-actor = { path = "../unknown-actor" }
-minijinja-embed = "2.12.0"
-minijinja = "2.12.0"
 memory-serve = "1.2.2"
 
 

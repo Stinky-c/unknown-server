@@ -1,0 +1,12 @@
+{
+	"servers": {
+		"mise mcp": {
+			"type": "stdio",
+			"command": "mise",
+			"args": [
+				"mcp"
+			]
+		}
+	},
+	"inputs": []
+}

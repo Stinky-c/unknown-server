@@ -5,3 +5,4 @@ run = "cargo run"
 [tasks.build]
 description = "Build the release backend binary"
 run = "cargo build --release"
+depends = "//unknown-web:build"
