@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Unknown — Simple Landing</title>
+    <link rel="stylesheet" href="/src/css/app.css" />
+    <script type="module" src="/src/js/app.js"></script>
+</head>
+
+<body class="bg-base-200 text-base-content">
+    <!-- Navigation -->
+    <include src="src/components/navbar.html"></include>
+
+    <!-- Hero -->
+    <section class="hero min-h-[60vh]">
+        <div class="hero-content container mx-auto px-6 flex-col lg:flex-row-reverse gap-10">
+            <div class="w-full lg:w-1/2">
+            </div>
+            <div class="w-full lg:w-1/2">
+                <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">Build fast, reliable distributed apps</h1>
+                <p class="py-6 text-lg text-muted-foreground">Unknown is a simple, modular stack combining a tiny actor
+                    runtime, a fast Rust web server, and a modern static frontend. Focus on features — we handle the
+                    plumbing.</p>
+                <div class="flex gap-4">
+                    <a class="btn btn-primary btn-lg" href="/getting-started">Get started</a>
+                    <a class="btn btn-outline btn-lg" href="#features">Learn more</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold">What you'll get</h2>
+                <p class="text-muted-foreground mt-2">A pragmatic toolkit for building scalable services with minimal
+                    friction.</p>
+            </div>
+
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body">
+                        <h3 class="card-title">Actor Pool</h3>
+                        <p class="text-sm text-muted-foreground">Lightweight actor pool for distributing CPU-bound tasks
+                            across workers.</p>
+                        <div class="card-actions">
+                            <a class="btn btn-sm btn-link" href="#">Read docs →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body">
+                        <h3 class="card-title">Auth & Sessions</h3>
+                        <p class="text-sm text-muted-foreground">Session-backed auth using Redis with secure password
+                            hashing.</p>
+                        <div class="card-actions">
+                            <a class="btn btn-sm btn-link" href="#">Read docs →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body">
+                        <h3 class="card-title">Embedded Frontend</h3>
+                        <p class="text-sm text-muted-foreground">Static frontend assets embedded into the server binary
+                            for simple deployments.</p>
+                        <div class="card-actions">
+                            <a class="btn btn-sm btn-link" href="#">Read docs →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-12 bg-base-300">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-2xl font-semibold">Ready to try Unknown?</h3>
+            <p class="text-muted-foreground mt-2">Start a new project with our templates and get a working stack in
+                minutes.</p>
+            <div class="mt-6">
+                <a class="btn btn-primary btn-lg" href="/docs/getting-started">Start the guide</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t bg-base-100">
+        <div class="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between">
+            <p class="text-sm text-muted-foreground">© Unknown — Minimal distributed stacks</p>
+            <div class="flex gap-3 mt-3 md:mt-0">
+                <a class="link link-hover" href="#privacy">Privacy</a>
+                <a class="link link-hover" href="#terms">Terms</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

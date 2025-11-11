@@ -14,7 +14,6 @@ use axum::{Router, routing::get};
 use axum_login::AuthManagerLayerBuilder;
 use axum_prometheus::PrometheusMetricLayer;
 use fred::prelude::{ClientLike, Config as FredConfig, Pool as FredPool};
-use memory_serve::{CacheControl, MemoryServe, load_assets};
 use sqlx::postgres::PgPoolOptions;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -113,28 +112,29 @@ async fn main() -> Result<()> {
     // Actor pool
     let actor_pool = unknown_actor_lib::pool::pool(None, None).await?;
 
+    let assets_router: Option<_> = if cfg!(not(debug_assertions)) {
+        use memory_serve::{CacheControl, MemoryServe, load_assets};
+
+        Some(
+            MemoryServe::new(load_assets!("dist/"))
+                .index_file(None)
+                .cache_control(CacheControl::Medium)
+                .into_router(),
+        )
+    } else {
+        None
+    };
     let state = Arc::new(AppState::new(pg_pool, fred_pool, actor_pool));
     let router = Router::new()
-        .route("/", get(|| async { "Hello, World!" }))
         .route("/metrics", get(|| async move { metric_handle.render() }))
         .nest("/api/auth", routes::auth::router())
         .nest("/upload", routes::upload::router())
         .with_state(state)
+        .merge(assets_router.unwrap_or_else(Router::new))
         .layer(auth_layer)
         .layer(prometheus_layer)
         .layer((*CONFIG).ip_source.clone().into_extension())
         .layer(TraceLayer::new_for_http());
-
-    #[cfg(not(debug_assertions))]
-    {
-        let assets_router = {
-            MemoryServe::new(load_assets!("dist/"))
-                .index_file(None)
-                .cache_control(CacheControl::Medium)
-                .into_router()
-        };
-        router.merge(assets_router)
-    }
 
     let app_host = &CONFIG.app_host;
     let listener = tokio::net::TcpListener::bind(app_host).await?;

@@ -2,15 +2,21 @@
   "name": "unknown-web",
   "private": true,
   "version": "0.0.0",
-  "source": "src/**/*.html",
+  "source": [
+    "src/*.html",
+    "src/**/*.html"
+  ],
   "scripts": {
-    "dev": "parcel src/**/*.html",
-    "build": "parcel build src/**/*.html --public-url ./"
+    "dev": "parcel",
+    "build": "parcel build"
   },
   "devDependencies": {
+    "@parcel/config-default": "^2.16.1",
+    "@parcel/plugin": "^2.16.1",
     "@tailwindcss/postcss": "^4.1.17",
     "daisyui": "^5.4.7",
     "parcel": "^2.14.0",
+    "parcel-namer-rewrite": "2.10.3-rc.5",
     "postcss": "^8.5.6",
     "posthtml": "^0.16.7",
     "posthtml-doctype": "^1.1.1",
@@ -27,7 +33,15 @@
       "includeNodeModules": [
         "htmx.org",
         "zxcvbn"
-      ]
+      ],
+      "publicUrl": "public/"
+    }
+  },
+  "parcel-namer-rewrite": {
+    "rules": {
+      "(.*).css": "assets/css/$1{.hash}.css",
+      "(.*).js": "assets/js/$1{.hash}.js",
+      "(.*).png": "assets/img'$1{.hash}.png"
     }
   }
 }

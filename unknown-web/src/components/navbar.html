@@ -1,5 +1,25 @@
-<nav>
-    <a href="/src/pages/auth/login.html"> Login</a>
-    <a href="/src/pages/auth/signup.html"> Signup</a>
-    <a href="/src/pages/test/post1.html"> Post 1</a>
-</nav>
+<header class="w-full border-b bg-base-100">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3">
+            <div
+                class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+                U</div>
+            <span class="text-xl font-semibold">Unknown</span>
+        </a>
+        <nav class="hidden md:flex gap-4 items-center">
+            <!-- <a class="link link-hover" href="">Features</a> -->
+            <a class="link link-hover" href="/src/pages/about.html">About</a>
+            <!-- <a class="link link-hover" href="">Contact</a> -->
+            <a class="link link-hover" href="/src/pages/auth/login.html">Sign in</a>
+            <a class="link link-hover" href="/src/pages/auth/signup.html">Sign up</a>
+        </nav>
+        <div class="md:hidden">
+            <label for="mobile-menu" class="btn btn-square btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </label>
+        </div>
+    </div>
+</header>

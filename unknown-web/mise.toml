@@ -5,6 +5,7 @@ run = "pnpm run dev"
 [tasks.build]
 description = "Build the release frontend dist"
 run = "pnpm run build"
+depends = ":clean"
 
 [tasks.clean]
 description = "Clean old dist"

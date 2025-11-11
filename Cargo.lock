@@ -321,6 +321,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "axum-extra"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5136e6c5e7e7978fe23e9876fb924af2c0f84c72127ac6ac17e7c46f457d362c"
+dependencies = [
+ "axum",
+ "axum-core",
+ "bytes",
+ "futures-core",
+ "futures-util",
+ "http",
+ "http-body",
+ "http-body-util",
+ "mime",
+ "pin-project-lite",
+ "tower-layer",
+ "tower-service",
+ "tracing",
+]
+
+[[package]]
 name = "axum-login"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2882,12 +2903,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "minijinja-embed"
-version = "2.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1437c67e5470a94aae60bb715c92581e479476e1bbb45a7d467063ead7f543ad"
-
-[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5122,15 +5137,16 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "axum-client-ip",
+ "axum-extra",
  "axum-login",
  "axum-prometheus",
  "base64",
+ "cfg-if",
  "dotenvy",
  "figment",
  "figment_file_provider_adapter",
  "fred",
  "memory-serve",
- "minijinja-embed",
  "password-auth",
  "rand 0.9.2",
  "serde",
