@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Signup next generation</title>
+    <link rel="stylesheet" href="/src/css/app.css">
+    <script type="module" src="/src/js/app.js"></script>
+</head>
+
+<body>
+    <main>
+        <include src="src/components/navbar.html"></include>
+        <div class="card lg:card-side bg-base-100 shadow-sm flex justify-center">
+            <div class="card-body" id="outerHtml">
+                <form id="signup-form" hx-post="/api/auth/login" hx-swap="outerHTML" hx-indicator="#auth-indicator">
+
+                    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                        <legend class="fieldset-legend">Login</legend>
+
+
+                        <div id="form-errors" aria-live="polite" class="alert alert-error hidden">
+                            <span id="error-message"></span>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="username">
+                                <span class="label-text font-medium">Username</span>
+                            </label>
+                            <input id="username" name="username" type="text" placeholder="john.doe" required
+                                class="input input-bordered w-full bg-base-100 focus:input-primary" />
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="password">
+                                <span class="label-text font-medium">Password</span>
+                            </label>
+                            <input id="password" name="password" type="password" required minlength="6"
+                                class="input input-bordered w-full bg-base-100 focus:input-primary" />
+                        </div>
+
+                        <div>
+                            <div id="auth-indicator"
+                                class="loading loading-spinner loading-sm text-primary htmx-indicator"></div>
+                            <button class="btn btn-neutral mt-4">Login</button>
+
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+
+        </div>
+    </main>
+    <script>
+
+    </script>
+</body>
+
+</html>

@@ -8,11 +8,12 @@
   ],
   "scripts": {
     "dev": "parcel",
-    "build": "parcel build"
+    "build": "parcel build --reporter @parcel/reporter-bundle-buddy"
   },
   "devDependencies": {
     "@parcel/config-default": "^2.16.1",
     "@parcel/plugin": "^2.16.1",
+    "@parcel/reporter-bundle-buddy": "^2.16.1",
     "@tailwindcss/postcss": "^4.1.17",
     "daisyui": "^5.4.7",
     "parcel": "^2.14.0",
@@ -33,8 +34,7 @@
       "includeNodeModules": [
         "htmx.org",
         "zxcvbn"
-      ],
-      "publicUrl": "public/"
+      ]
     }
   },
   "parcel-namer-rewrite": {

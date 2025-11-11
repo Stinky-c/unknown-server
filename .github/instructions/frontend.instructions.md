@@ -50,12 +50,14 @@ DaisyUI is loaded via `@plugin "daisyui"` in the CSS file and provides:
 - `form-control`: Form layouts with `label` and `input`
 - `loading`: Loading spinners and skeletons
 
-**Theme System:**
+**GitHub Dimmed Dark Theme:**
 
-- Uses CSS custom properties for theming
-- Base colors: `bg-base-100`, `bg-base-200`, `bg-base-300`
-- Text colors: `text-base-content`, `text-muted-foreground`
-- Semantic colors: `btn-primary`, `btn-secondary`, `btn-accent`
+- **Default Theme**: `data-theme="github-dark"` applied to `<html>` element
+- **Color System**: Based on GitHub's dimmed dark palette for consistent visual experience
+- **Base Canvas**: `bg-base-100` (#22272e), `bg-base-200` (#2d333b), `bg-base-300` (#373e47)
+- **Text Colors**: `text-base-content` (#adbac7), `text-muted-foreground` (#768390)
+- **Accent Colors**: Primary (#539bf5), Success (#57ab5a), Warning (#c69026), Danger (#e5534b)
+- **Custom Variables**: Extended TailwindCSS with `--gh-*` color tokens for semantic theming
 
 **Example DaisyUI Usage:**
 
@@ -227,6 +229,250 @@ Production builds:
   <span class="loading loading-spinner loading-sm htmx-indicator"></span>
   Submit
 </button>
+```
+
+## GitHub Dimmed Dark Theme System
+
+### Theme Configuration
+
+The project uses a custom GitHub-inspired dimmed dark theme configured through:
+
+**TailwindCSS Extensions** (`tailwind.config.js`):
+
+- Custom color palette matching GitHub's dimmed dark theme
+- Extended color tokens: `gh-canvas-*`, `gh-fg-*`, `gh-accent-*`, `gh-success-*`, etc.
+- Consistent typography and spacing scales
+
+**DaisyUI Theme** (`src/css/app.css`):
+
+- Custom `github-dark` theme with OKLCH color space values
+- Semantic color mapping: primary, secondary, accent, neutral states
+- Component-level theming for buttons, cards, forms, and alerts
+
+### Color Palette
+
+**Canvas Colors:**
+
+```css
+--gh-canvas-default: #22272e; /* Main background */
+--gh-canvas-overlay: #2d333b; /* Cards, modals, overlays */
+--gh-canvas-inset: #1c2128; /* Input backgrounds, code blocks */
+--gh-canvas-subtle: #373e47; /* Subtle backgrounds, disabled states */
+```
+
+**Foreground Colors:**
+
+```css
+--gh-fg-default: #adbac7; /* Primary text */
+--gh-fg-muted: #768390; /* Secondary text, placeholders */
+--gh-fg-subtle: #545d68; /* Subtle text, hints */
+--gh-fg-on-emphasis: #ffffff; /* Text on colored backgrounds */
+```
+
+**Semantic Colors:**
+
+```css
+--gh-accent-fg: #539bf5; /* Links, primary actions */
+--gh-success-fg: #57ab5a; /* Success states */
+--gh-attention-fg: #c69026; /* Warning states */
+--gh-danger-fg: #e5534b; /* Error states, destructive actions */
+```
+
+**Border Colors:**
+
+```css
+--gh-border-default: #444c56; /* Standard borders */
+--gh-border-muted: #373e47; /* Subtle borders */
+--gh-border-subtle: #2d333b; /* Very subtle dividers */
+```
+
+### Theme Usage Patterns
+
+**Apply Theme to Pages:**
+
+```html
+<html lang="en" data-theme="github-dark">
+  <body class="bg-base-200 text-base-content">
+    <!-- Content uses theme automatically -->
+  </body>
+</html>
+```
+
+**DaisyUI Components with Theme:**
+
+```html
+<!-- Buttons automatically use theme colors -->
+<button class="btn btn-primary">Primary Action</button>
+<button class="btn btn-secondary">Secondary Action</button>
+<button class="btn btn-error">Destructive Action</button>
+
+<!-- Cards with proper contrast -->
+<div class="card bg-base-100 shadow-md">
+  <div class="card-body">
+    <h2 class="card-title">Themed Card</h2>
+  </div>
+</div>
+
+<!-- Form inputs with theme styling -->
+<input class="input input-bordered" placeholder="Themed input" />
+```
+
+**Custom Components with Theme Variables:**
+
+```css
+/* Use CSS custom properties for consistency */
+.custom-component {
+  background: var(--gh-canvas-overlay);
+  border: 1px solid var(--gh-border-default);
+  color: var(--gh-fg-default);
+}
+
+.custom-component:hover {
+  border-color: var(--gh-accent-fg);
+}
+```
+
+**TailwindCSS Utility Classes:**
+
+```html
+<!-- Extended GitHub color utilities -->
+<div class="bg-gh-canvas-overlay border-gh-border-default">
+  <span class="text-gh-fg-muted">Muted text</span>
+  <a class="text-gh-accent-fg hover:text-gh-accent-emphasis">Link</a>
+</div>
+```
+
+### Alert and Status Components
+
+**Themed Alert Patterns:**
+
+```html
+<!-- Success alert -->
+<div
+  class="alert alert-success bg-gh-success-subtle border-gh-success-muted text-gh-success-fg"
+>
+  <span>Operation completed successfully</span>
+</div>
+
+<!-- Error alert -->
+<div
+  class="alert alert-error bg-gh-danger-subtle border-gh-danger-muted text-gh-danger-fg"
+>
+  <span>An error occurred</span>
+</div>
+
+<!-- Warning alert -->
+<div
+  class="alert alert-warning bg-gh-attention-subtle border-gh-attention-muted text-gh-attention-fg"
+>
+  <span>Please review this action</span>
+</div>
+
+<!-- Info alert -->
+<div
+  class="alert alert-info bg-gh-accent-subtle border-gh-accent-muted text-gh-accent-fg"
+>
+  <span>Additional information</span>
+</div>
+```
+
+### Authentication Pages
+
+Authentication pages (`login.html`, `signup.html`) are built entirely with TailwindCSS and DaisyUI:
+
+**Page Structure:**
+
+```html
+<html lang="en" data-theme="github-dark">
+  <body class="min-h-screen bg-base-100 flex items-center justify-center p-4">
+    <main
+      class="card bg-base-200 shadow-xl border border-base-300 w-full max-w-md"
+    >
+      <div class="card-body">
+        <!-- Form content -->
+      </div>
+    </main>
+  </body>
+</html>
+```
+
+**Form Components:**
+
+```html
+<!-- Form control with proper spacing -->
+<div class="form-control">
+  <label class="label" for="username">
+    <span class="label-text font-medium">Username</span>
+  </label>
+  <input
+    id="username"
+    name="username"
+    type="text"
+    class="input input-bordered w-full bg-base-100 focus:input-primary"
+  />
+</div>
+
+<!-- Error states -->
+<div id="form-errors" class="alert alert-error hidden">
+  <span id="error-message"></span>
+</div>
+
+<!-- HTMX form with loading indicator -->
+<form
+  hx-post="/api/auth/login"
+  hx-indicator="#auth-indicator"
+  class="space-y-4"
+>
+  <div class="flex items-center gap-3">
+    <div
+      class="loading loading-spinner loading-sm text-primary htmx-indicator"
+    ></div>
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </div>
+</form>
+```
+
+**Key Features:**
+
+- **No Custom CSS**: Uses only TailwindCSS and DaisyUI classes
+- **GitHub Theme Integration**: Automatic theme color application via `data-theme="github-dark"`
+- **HTMX Integration**: Built-in loading indicators and error handling
+- **Form Validation**: Client-side validation with visual feedback using `.invalid` class
+- **Responsive Design**: Mobile-first with proper touch targets
+- **Accessibility**: Proper ARIA labels and semantic HTML structure
+
+**Enhanced JavaScript Features:**
+
+- Real-time password confirmation validation (signup page)
+- Error message display and auto-hiding
+- Focus management for invalid fields
+- HTMX response handling with user feedback
+
+### Theme Customization
+
+**Adding New Theme Variants:**
+
+1. Extend `tailwind.config.js` with new color tokens
+2. Add new theme in `src/css/app.css` using DaisyUI format
+3. Update component styles to use new semantic colors
+4. Test contrast ratios and accessibility
+
+**Component Theme Overrides:**
+
+```css
+/* Override specific component themes */
+.custom-card {
+  background: var(--gh-canvas-inset);
+  border: 1px solid var(--gh-border-muted);
+}
+
+.custom-card .title {
+  color: var(--gh-fg-default);
+}
+
+.custom-card .subtitle {
+  color: var(--gh-fg-muted);
+}
 ```
 
 ## Integration with Backend

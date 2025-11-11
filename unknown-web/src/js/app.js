@@ -1,2 +1,2 @@
-import 'htmx.org';
-import "zxcvbn"
+import "htmx.org";
+import "zxcvbn";

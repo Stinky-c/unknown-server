@@ -50,7 +50,7 @@ async fn post_signup(
         return Err(StatusCode::FORBIDDEN.into());
     }
 
-    if signup.password != signup.confirm_password {
+    if signup.password != signup.password_confirm {
         return Err(StatusCode::UNAUTHORIZED.into());
     }
 

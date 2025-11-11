@@ -4,79 +4,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="/src/css/auth.css">
+  <title>Login — Unknown</title>
+  <link rel="stylesheet" href="/src/css/app.css">
+  <script type="module" src="/src/js/app.js"></script>
 </head>
 
-<body>
+<body class="min-h-screen bg-base-100 flex items-center justify-center p-4" data-theme="github-dark">
 
-  <main class="card" role="main">
-    <!-- auth-area is the element we hx-swap on submit -->
-    <div id="auth-area">
-      <h1>Sign in</h1>
-      <p class="lead">Welcome back — enter your details to continue.</p>
+  <main class="card bg-base-200 shadow-xl border border-base-300 w-full max-w-md" role="main">
+    <div class="card-body">
+      <!-- auth-area is the element we hx-swap on submit -->
+      <div id="auth-area">
+        <h1 class="text-2xl font-semibold text-base-content mb-2">Sign in</h1>
+        <p class="text-base-content/70 mb-6">Welcome back — enter your details to continue.</p>
 
-      <!--
-      Form behavior:
-      - hx-post sends form via AJAX to /login
-      - hx-swap="outerHTML" replaces #auth-area entirely with server response fragment
-      - hx-headers picks up a CSRF token meta tag (replace on server-render)
-      - hx-indicator shows a small loading indicator while request is in-flight
-    -->
-      <form id="login-form" hx-post="/api/auth/login" hx-swap="outerHTML"
-        hx-headers='{"X-CSRF-Token":"REPLACE_WITH_TOKEN"}' hx-indicator="#auth-indicator" method="post"
-        autocomplete="on">
-        <div id="form-errors" aria-live="polite"></div>
+        <!--
+        Form behavior:
+        - hx-post sends form via AJAX to /login
+        - hx-swap="outerHTML" replaces #auth-area entirely with server response fragment
+        - hx-headers picks up a CSRF token meta tag (replace on server-render)
+        - hx-indicator shows a small loading indicator while request is in-flight
+      -->
+        <form id="login-form" hx-post="/api/auth/login" hx-swap="outerHTML"
+          hx-headers='{"X-CSRF-Token":"REPLACE_WITH_TOKEN"}' hx-indicator="#auth-indicator" method="post"
+          autocomplete="on" class="space-y-4">
 
-        <div>
-          <label for="username">Username</label>
-          <input id="username" name="username" type="text" placeholder="john.doe" required />
-        </div>
-
-        <div>
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" required minlength="6" />
-        </div>
-
-        <div class="row controls" style="margin-top:0.25rem;">
-          <label class="remember">
-            <input id="remember" type="checkbox" name="remember" value="1" />
-            Remember me
-          </label>
-
-          <div style="display:flex; align-items:center;">
-            <div id="auth-indicator">Processing…</div>
-            <button type="submit" class="btn">Sign in</button>
+          <div id="form-errors" aria-live="polite" class="alert alert-error hidden">
+            <span id="error-message"></span>
           </div>
-        </div>
 
-        <div style="margin-top:0.75rem; text-align:center;">
-          <a class="muted-link" href="/auth/forgot">Forgot password?</a>
-        </div>
-      </form>
-      <hr style="margin:1rem 0; border:none; border-top:1px solid #f0f2f4" />
-      <p style="text-align:center; font-size:0.9rem; color:var(--muted); margin:0;">Or <a href="/auth/signup"
-          class="muted-link">create an account</a></p>
+          <div class="form-control">
+            <label class="label" for="username">
+              <span class="label-text font-medium">Username</span>
+            </label>
+            <input id="username" name="username" type="text" placeholder="john.doe" required
+              class="input input-bordered w-full bg-base-100 focus:input-primary" />
+          </div>
+
+          <div class="form-control">
+            <label class="label" for="password">
+              <span class="label-text font-medium">Password</span>
+            </label>
+            <input id="password" name="password" type="password" required minlength="6"
+              class="input input-bordered w-full bg-base-100 focus:input-primary" />
+          </div>
+
+          <div class="flex items-center justify-between">
+            <label class="label cursor-pointer">
+              <input id="remember" type="checkbox" name="remember" value="1"
+                class="checkbox checkbox-primary checkbox-sm mr-2" />
+              <span class="label-text text-sm">Remember me</span>
+            </label>
+
+            <div class="flex items-center gap-3">
+              <div id="auth-indicator" class="loading loading-spinner loading-sm text-primary htmx-indicator"></div>
+              <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <a href="/auth/forgot" class="link link-primary text-sm">Forgot password?</a>
+          </div>
+        </form>
+
+        <div class="divider my-6"></div>
+
+        <p class="text-center text-sm text-base-content/60">
+          Or <a href="/auth/signup" class="link link-primary">create an account</a>
+        </p>
+      </div>
     </div>
   </main>
+
+  <script>
+    // Enhanced HTMX response handling
+    document.body.addEventListener('htmx:afterRequest', function (evt) {
+      // Focus first invalid input if server marks one with .invalid
+      var container = evt.detail.target;
+      var invalid = container && container.querySelector('.invalid');
+      if (invalid) {
+        invalid.focus();
+      }
+
+      // Handle error responses
+      if (evt.detail.xhr.status >= 400) {
+        var errorContainer = document.getElementById('form-errors');
+        var errorMessage = document.getElementById('error-message');
+        if (errorContainer && errorMessage) {
+          errorMessage.textContent = 'Login failed. Please check your credentials.';
+          errorContainer.classList.remove('hidden');
+        }
+      }
+    });
+
+    // Hide error messages when user starts typing
+    document.addEventListener('input', function (evt) {
+      if (evt.target.matches('input')) {
+        var errorContainer = document.getElementById('form-errors');
+        if (errorContainer) {
+          errorContainer.classList.add('hidden');
+        }
+      }
+    });
+  </script>
+
 </body>
 
-
-
-<!-- {% endblock %}
-
-{% block script %} -->
-<script>
-  // Example: client-side enhancement to inspect htmx responses (optional)
-  document.body.addEventListener('htmx:afterRequest', function (evt) {
-    // focus first invalid input if server marks one with .invalid
-    var container = evt.detail.target;
-    var invalid = container && container.querySelector('.invalid');
-    if (invalid) {
-      invalid.focus();
-    }
-  });
-</script>
-
 </html>
-<!-- {% endblock %} -->

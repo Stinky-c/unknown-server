@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Signup next generation</title>
+    <link rel="stylesheet" href="/src/css/app.css">
+    <script type="module" src="/src/js/app.js"></script>
+</head>
+
+<body>
+    <main>
+        <include src="src/components/navbar.html"></include>
+        <div class="card lg:card-side bg-base-100 shadow-sm flex justify-center">
+            <div class="card-body">
+                <form id="signup-form" hx-post="/api/auth/signup" hx-swap="outerHTML" hx-indicator="#auth-indicator">
+
+                    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                        <legend class="fieldset-legend">Signup</legend>
+
+
+                        <div id="form-errors" aria-live="polite" class="alert alert-error hidden">
+                            <span id="error-message"></span>
+                        </div>
+
+                        <div>
+                            <label class="label">Username</label>
+                            <input type="text" class="input" placeholder="john.doe">
+                        </div>
+
+                        <div>
+                            <label class="label">Email</label>
+                            <input type="email" class="input" placeholder="john.doe@example.com" />
+                        </div>
+
+                        <div>
+                            <label class="label">Password</label>
+                            <input type="password" class="input" />
+                        </div>
+                        <div>
+                            <label class="label"> Confirm Password</label>
+                            <input type="password" class="input" />
+                        </div>
+
+                        <button class="btn btn-neutral mt-4">Signup</button>
+                    </fieldset>
+                </form>
+
+            </div>
+
+        </div>
+    </main>
+    <script>
+
+    </script>
+</body>
+
+</html>

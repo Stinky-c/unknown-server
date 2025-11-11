@@ -21,6 +21,9 @@ importers:
       '@parcel/plugin':
         specifier: ^2.16.1
         version: 2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))
+      '@parcel/reporter-bundle-buddy':
+        specifier: ^2.16.1
+        version: 2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))
       '@tailwindcss/postcss':
         specifier: ^4.1.17
         version: 4.1.17
@@ -30,9 +33,6 @@ importers:
       parcel:
         specifier: ^2.14.0
         version: 2.16.1(@swc/helpers@0.5.17)
-      parcel-namer-custom:
-        specifier: ^0.2.0
-        version: 0.2.0(@parcel/core@2.16.1(@swc/helpers@0.5.17))
       parcel-namer-rewrite:
         specifier: 2.10.3-rc.5
         version: 2.10.3-rc.5(@parcel/core@2.16.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)
@@ -272,6 +272,10 @@ packages:
   '@parcel/profiler@2.16.1':
     resolution: {integrity: sha512-9VKswpixK5CggxqoEoThiusnRbqU48QIWwmGQhaTV9iBYi9m/LhEYUoTa8K/KQ70yJknghMMNc1JfAvt2bfh5w==}
     engines: {node: '>= 16.0.0'}
+
+  '@parcel/reporter-bundle-buddy@2.16.1':
+    resolution: {integrity: sha512-u5pL5a2t8/Zkgao0WKyeX7M68tZfFNJSZs1fprff6hXZlWU//wzoS/PSZHqUa4yIG0heEqse8C7BNDnA6mXkfw==}
+    engines: {node: '>= 16.0.0', parcel: ^2.16.1}
 
   '@parcel/reporter-cli@2.16.1':
     resolution: {integrity: sha512-+P4Nvg5a2GnOpsIf93U75JjPgltrAmGTCVyRpbeBo45uFBvHGKPX5O7Vn7rl1wWunNobOAxn6F9JxPCApcw79A==}
@@ -1071,10 +1075,6 @@ packages:
   ordered-binary@1.6.0:
     resolution: {integrity: sha512-IQh2aMfMIDbPjI/8a3Edr+PiOpcsB7yo8NdW7aHWVaoR/pcDldunMvnnwbk/auPGqmKeAdxtZl7MHX/QmPwhvQ==}
 
-  parcel-namer-custom@0.2.0:
-    resolution: {integrity: sha512-TgIKjkrNB/IeZqEdOKmqswJrZrAdpXXMU70j7ZOXmN7C5gDehZ2ooONROnuNTWGajNrCJ5NjUW6d4se7uPbodg==}
-    engines: {node: '>=10', parcel: ^2.0.0-nightly.1 || ^2.0.0-beta.1}
-
   parcel-namer-rewrite@2.10.3-rc.5:
     resolution: {integrity: sha512-bDNH9bLIST4cZOaul7XsCQ6ZnciQVSciOx239yra4puvALoM81yFXTk6HYGa1cKxe7k0diW6PJhkVffvuWKoHw==}
     engines: {node: '>= 10.0.0', parcel: ^2.10.3}
@@ -1587,6 +1587,13 @@ snapshots:
       '@parcel/events': 2.16.1
       '@parcel/types-internal': 2.16.1
       chrome-trace-event: 1.0.4
+
+  '@parcel/reporter-bundle-buddy@2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))':
+    dependencies:
+      '@parcel/plugin': 2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))
+    transitivePeerDependencies:
+      - '@parcel/core'
+      - napi-wasm
 
   '@parcel/reporter-cli@2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))':
     dependencies:
@@ -2435,13 +2442,6 @@ snapshots:
       object-keys: 1.1.1
 
   ordered-binary@1.6.0: {}
-
-  parcel-namer-custom@0.2.0(@parcel/core@2.16.1(@swc/helpers@0.5.17)):
-    dependencies:
-      '@parcel/plugin': 2.16.1(@parcel/core@2.16.1(@swc/helpers@0.5.17))
-    transitivePeerDependencies:
-      - '@parcel/core'
-      - napi-wasm
 
   parcel-namer-rewrite@2.10.3-rc.5(@parcel/core@2.16.1(@swc/helpers@0.5.17))(@swc/helpers@0.5.17):
     dependencies:

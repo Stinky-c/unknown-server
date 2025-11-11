@@ -117,7 +117,6 @@ async fn main() -> Result<()> {
 
         Some(
             MemoryServe::new(load_assets!("dist/"))
-                .index_file(None)
                 .cache_control(CacheControl::Medium)
                 .into_router(),
         )
@@ -128,7 +127,7 @@ async fn main() -> Result<()> {
     let router = Router::new()
         .route("/metrics", get(|| async move { metric_handle.render() }))
         .nest("/api/auth", routes::auth::router())
-        .nest("/upload", routes::upload::router())
+        .nest("/api/upload", routes::upload::router())
         .with_state(state)
         .merge(assets_router.unwrap_or_else(Router::new))
         .layer(auth_layer)

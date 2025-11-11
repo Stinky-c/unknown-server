@@ -34,7 +34,7 @@ pub struct UserSignupDto {
     /// Unhashed password
     pub password: String,
     /// unhashed confirm password
-    pub confirm_password: String,
+    pub password_confirm: String,
 }
 impl Debug for UserSignupDto {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
